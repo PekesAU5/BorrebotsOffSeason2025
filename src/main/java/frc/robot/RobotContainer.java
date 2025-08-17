@@ -262,15 +262,19 @@ public Command L3Elevator(){
         ShuffleboardTab  tab = Shuffleboard.getTab("RobotData");
         tab.add(autoChooser).withWidget(BuiltInWidgets.kSplitButtonChooser).withSize(4, 4);
         
+        // tab.add(autoChooser).withWidget(BuiltInWidgets.kSplitButtonChooser);
+        SmartDashboard.putData(autoChooser);
         tab.addInteger("Id", () -> limelight.getId()).withWidget(BuiltInWidgets.kTextView);
         tab.addBoolean("Id Detected", ()-> limelight.hasTarget()).withWidget(BuiltInWidgets.kBooleanBox);
-        tab.addDouble("Navx limited heading", () -> m_robotDrive.getLimitedGyroYaw()).withWidget(BuiltInWidgets.kTextView);
+        tab.addDouble("Navx limited heading", () -> m_robotDrive.getLimitedGyroYaw());
         tab.addBoolean("Slow Mode", ()-> DriveConstants.kSlowMode).withWidget(BuiltInWidgets.kBooleanBox);
         tab.addBoolean("FieldRelative", ()-> DriveConstants.fieldRelative).withWidget(BuiltInWidgets.kBooleanBox);
         tab.add(CameraServer.startAutomaticCapture(limelightFeed).getSource());
-        tab.addDouble("Tx",()-> limelight.getTx()).withWidget(BuiltInWidgets.kTextView);
-        tab.addDouble("Ty",()-> limelight.getTy()).withWidget(BuiltInWidgets.kTextView);
-        tab.addDouble("Tz",()-> limelight.getRy()).withWidget(BuiltInWidgets.kTextView);
+        tab.addDouble("Tx",()-> limelight.getTx());
+        tab.addDouble("Ty",()-> limelight.getTy());
+        tab.addDouble("Tz",()-> limelight.getRy());
+        tab.addBoolean("IsAlligned", ()-> limelight.isAlligned());
+        
 
 
     }
