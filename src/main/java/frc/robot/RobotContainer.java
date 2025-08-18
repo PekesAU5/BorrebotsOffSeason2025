@@ -71,7 +71,7 @@ private final Limelight limelight = new Limelight(m_robotDrive);
        SmartDashboard.putData("AutoChooser", autoChooser);
 
 
-shuffleboardData(limelightFeed);
+shuffleboardData();
 
 
    SmartDashboard.putNumber("Tx Value", limelight.getTx());
@@ -180,7 +180,7 @@ shuffleboardData(limelightFeed);
 
 
 
-    public void shuffleboardData(HttpCamera limelightFeed) {
+    public void shuffleboardData() {
         
         ShuffleboardTab  tab = Shuffleboard.getTab("RobotData");
         

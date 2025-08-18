@@ -167,14 +167,17 @@ public static double limelightLensHeightInches = Units.metersToInches(0.23);
 // distance from the target to the floor
 public static double goalHeightInches = Units.metersToInches(0.305); 
 
-public static boolean isRightReef = false;
 
+
+public static boolean isRightReef;
+public static  double xReefSetpoint = isRightReef? 3: -3;
 
 public static final double yReefSetpoint =  3;
-public static final double yReefTolerance = 0.3;
+public static final double yReefTolerance = 0.15;
 
-public static final double xReefSetpoint = isRightReef ? 4   : -4;
-public static final double xReefTolerance = 0.3;
+public static final double xLeftReefSetpoint = 4;
+public static final double xRightReefSetpoint = -7;
+public static final double xReefTolerance = 0.15;
 
 public static final double rotReefSetpoint = 0.0;
 public static final double rotReefTolerance = 1;
