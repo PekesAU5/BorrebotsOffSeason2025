@@ -26,12 +26,10 @@ import frc.robot.Subsystems.Limelight;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -47,10 +45,7 @@ private final SendableChooser<Command> autoChooser;
 
  // The robot's subsystems
  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-// private final ClimbSubsytem m_climb = new ClimbSubsytem();
-// private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
-// private final IntakeSubsystem m_intake = new IntakeSubsystem();
-// private final ArmSubsystem m_arm = new ArmSubsystem(m_intake);
+
 private final Limelight limelight = new Limelight(m_robotDrive);
 
 
@@ -67,13 +62,12 @@ private final Limelight limelight = new Limelight(m_robotDrive);
  DriverStation.silenceJoystickConnectionWarning(true);
     
     // Build an auto chooser. This will use Commands.none() as the default option.
-   
-//  LimelightHelpers.setLEDMode_ForceOff(limelight.LL);
+
    autoChooser = AutoBuilder.buildAutoChooser();
   
    HttpCamera limelightFeed = new HttpCamera(limelight.LL, "http://10.47.82.11:5800");
    
-   
+    CameraServer.startAutomaticCapture(limelightFeed);
        SmartDashboard.putData("AutoChooser", autoChooser);
 
 
@@ -133,9 +127,9 @@ shuffleboardData(limelightFeed);
 
    
    
-    new Trigger(() -> m_driverController.getRightTriggerAxis() > 0.05).whileTrue(limelight.allignAllReef(true, 3.0));
+    new Trigger(() -> m_driverController.getRightTriggerAxis() > 0.05).whileTrue(limelight.allignAllReef(true));
     
-  new Trigger(()-> m_driverController.getLeftTriggerAxis() >0.05).whileTrue(limelight.allignAllReef(false, -7.0));
+  new Trigger(()-> m_driverController.getLeftTriggerAxis() >0.05).whileTrue(limelight.allignAllReef(false));
 
 
     // new Trigger(() -> m_driverController.getRightTriggerAxis() > 0).whileTrue(limelight.allignAllWithJoyStickAndGyro(6.0, 3.0, m_driverController));
@@ -183,84 +177,12 @@ shuffleboardData(limelightFeed);
 
 
 
-// public Command SubtoL3(){
-   
-    /*return m_arm.setArmAngle(Constants.ArmConstants.kCoralAngle).repeatedly()
-    .alongWith(m_elevator.setElevatorHeight(Constants.ElevatorConstants.L3)).repeatedly();]*/
-    // return m_elevator.setElevatorHeight(Constants.ElevatorConstants.L3)
-    // .alongWith(m_arm.setArmAngle(Constants.ArmConstants.kTeleopCoralAngle)).repeatedly();
 
-/* 
-}
-public Command SubtoL2(){
-   return m_elevator.setElevatorHeight(Constants.ElevatorConstants.L2)
-    .alongWith(m_arm.setArmAngle(Constants.ArmConstants.kTeleopCoralAngle)).repeatedly();
-   
-}
-
-public Command BasePosition(){
-    
-    return m_elevator.setElevatorHeight(Constants.ElevatorConstants.BasePosition)
-    .alongWith(m_arm.setArmAngle(Constants.ArmConstants.kBaseAngle));
-    
-}
-
-public Command CoralStation(){
-
-    return m_elevator.setElevatorHeight(Constants.ElevatorConstants.BasePosition)
-    .andThen(m_arm.setArmAngle(Constants.ArmConstants.kTeleopCoralStationAngleAngle));
-    
-    
-}
-
-public Command SubtoTopAlgae(){
-    return m_elevator.setElevatorHeight(Constants.ElevatorConstants.TopAlgaeHeight)
-    .alongWith(m_arm.setArmAngle(Constants.ArmConstants.kAlgaeAngle));
-
-}
-
-public Command SubToBottomAlgae(){
-    return m_elevator.setElevatorHeight(Constants.ElevatorConstants.BottomAlgaeHeight)
-    .alongWith(m_arm.setArmAngle(Constants.ArmConstants.kAlgaeAngle));
-   
-
-}
-
-public Command autoScoreCoralL3Command(){
-
-    return m_elevator.setElevatorHeight(Constants.ElevatorConstants.L3)
-    .alongWith(m_arm.setArmAngle(Constants.ArmConstants.kCoralAngle))
-    .andThen(m_intake.AutolaunchCoral());
-}
-
- public Command autoScoreCoralL2Command(){
-     return m_elevator.setElevatorHeight(Constants.ElevatorConstants.L2)
-      .andThen(m_arm.setArmAngle(Constants.ArmConstants.kCoralAngle)).andThen(m_intake.AutolaunchCoral());
-
-}
-
-public Command autoraiseArmCommand(){
-    return m_arm.setArmAngle(ArmConstants.kCoralAngle);
-}
-
-public Command L3Elevator(){
-    return m_elevator.setElevatorHeight(ElevatorConstants.L3);
-}
-
-
-
- public Command autoGetCoralCommand(){
-
-    return m_elevator.setElevatorHeight(Constants.ElevatorConstants.L2)
-    .alongWith(m_arm.setArmAngle(Constants.ArmConstants.kCoralStationAngle))
-    .andThen(m_intake.AutogetCoral());
-    */
 
 
     public void shuffleboardData(HttpCamera limelightFeed) {
         
         ShuffleboardTab  tab = Shuffleboard.getTab("RobotData");
-        tab.add(autoChooser).withWidget(BuiltInWidgets.kSplitButtonChooser).withSize(4, 4);
         
         // tab.add(autoChooser).withWidget(BuiltInWidgets.kSplitButtonChooser);
         SmartDashboard.putData(autoChooser);
@@ -269,7 +191,6 @@ public Command L3Elevator(){
         tab.addDouble("Navx limited heading", () -> m_robotDrive.getLimitedGyroYaw());
         tab.addBoolean("Slow Mode", ()-> DriveConstants.kSlowMode).withWidget(BuiltInWidgets.kBooleanBox);
         tab.addBoolean("FieldRelative", ()-> DriveConstants.fieldRelative).withWidget(BuiltInWidgets.kBooleanBox);
-        tab.add(CameraServer.startAutomaticCapture(limelightFeed).getSource());
         tab.addDouble("Tx",()-> limelight.getTx());
         tab.addDouble("Ty",()-> limelight.getTy());
         tab.addDouble("Tz",()-> limelight.getRy());
