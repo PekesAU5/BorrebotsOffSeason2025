@@ -156,7 +156,7 @@ return positions[4];
         }, driveSubsystem);
     }
 
-    /*public Command allignAllWithJoyStickAndId(XboxController controller) {
+    public Command allignAllWithJoyStickAndId(XboxController controller) {
         return Commands.run(() -> {
             if (hasTarget()) {
                 double xVelocity = -xPidController.calculate(getTx(), 3) * 0.5;
@@ -171,7 +171,7 @@ return positions[4];
            
             }
         }, driveSubsystem);
-    }*/
+    }
 
     public Command allignAllReef(boolean isRightReef) {
     
