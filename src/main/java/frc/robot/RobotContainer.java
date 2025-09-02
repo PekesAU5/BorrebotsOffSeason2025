@@ -69,6 +69,7 @@ private final Limelight limelight = new Limelight(m_robotDrive);
    
     CameraServer.startAutomaticCapture(limelightFeed);
        SmartDashboard.putData("AutoChooser", autoChooser);
+       
 
 
 shuffleboardData();

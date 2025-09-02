@@ -9,13 +9,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
-import static edu.wpi.first.units.Units.Second;
-
-import edu.wpi.first.units.measure.Distance;
-
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -36,7 +29,7 @@ public final class Constants{
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static double kMaxSpeedMetersPerSecond = 4.8;
+    public static double kMaxSpeedMetersPerSecond = 4.0;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
     public static final double kDirectionSlewRate = 2.4; // radians per second   original es 1.2
@@ -44,9 +37,9 @@ public final class Constants{
     public static final double kRotationalSlewRate = 4.0; // percent per second (1 = 100%)   original es 2.0
 
     // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(21.5);
+    public static final double kTrackWidth = Units.inchesToMeters(23.5);
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(21.5);
+    public static final double kWheelBase = Units.inchesToMeters(23.5);
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -99,61 +92,6 @@ public final class Constants{
         / kDrivingMotorReduction;
   }
 
-
-
-public static class ElevatorConstants
-{
-  public static final int kElevatorMotorCanId = 41;
-    public static final boolean kElevatorMotorInverted = true;
-
-  public static final double   kElevatorKP              = 40.257;
-  public static final double   kElevatorKI              = 0;
-  public static final double   kElevatorKD              = 8.565;
-  public static final double   kElevatorkS              = 0.26737; // volts (V)
-  public static final double   kElevatorkV              = 9.9682;//10.773; // volt per velocity (V/(m/s))
-  public static final double   kElevatorkA              = 0.1931; // volt per acceleration (V/(m/s²))
-  public static final double   kElevatorkG              = 0.39266; // volts (V)
-  public static final double   kElevatorGearing         = 24.0;
-  public static final double   kElevatorSproketTeeth    = 16;
-  public static final double   kElevatorPitch           = Units.inchesToMeters(0.625);
-  public static final double   kElevatorDrumRadius      = (kElevatorSproketTeeth * kElevatorPitch) / (2 * Math.PI);// radius = Circumference / (2 pi)
-  public static final double   kCarriageMass            = 5.7; // kg
-  // Encoder is reset to measure 0 at the bottom, so minimum height is 0.
-  public static final double   kElevatorUnextendedHeightMeters   = Units.inchesToMeters(40.9949);
-  public static final Distance kElevatorUnextendedHeight = Meters.of(kElevatorUnextendedHeightMeters); 
-  public static final double   kMinElevatorHeightMeters = Units.inchesToMeters(0);//min height / 10
-  public static final double   kMaxElevatorHeightMeters = Units.inchesToMeters(23.09958818897638)+  kElevatorUnextendedHeightMeters;
-  
-  // Encoder is reset to measure 0 at the bottom, so minimum height is 0.
-  public static final Distance kLaserCANOffset          = Meters.of(0.27);
-
-  //public static final double kElevatorMaxVelocity = 3.5;
-  //public static final double kElevatorMaxAcceleration = 2.5;
-
-  public static final Distance kMinElevatorHeight      = Meters.of(kMinElevatorHeightMeters);
-  public static final Distance kMaxElevatorHeight      = Meters.of(kMaxElevatorHeightMeters);
-  public static final double   kElevatorAllowableError = Units.inchesToMeters(0.2);
-  // public static final double L1 = Units.inchesToMeters(); //la posición oficial es 13
-  public static final double BasePosition = Units.inchesToMeters(42);
-  public static final double L2 = Units.inchesToMeters(42.5);  //la posición oficial es 31.875
-  public static final double L3 = Units.inchesToMeters(58.6614); //la posición oficial es 47.625
-  // public static final double L4 = Units.inchesToMeters(70.55); // la posición oficial es 72
-  public static final double TopAlgaeHeight = Units.inchesToMeters(60);
-  public static final double BottomAlgaeHeight = Units.inchesToMeters(50);
-
-  public static       int      elevatorMotorID         = 41;
-
-  
-  public static       double   kElevatorRampRate       = 0.1;
-  public static       int      kElevatorCurrentLimit   = 40;
-  public static double kMaxVelocity = Meters.of(2).per(Second).in(MetersPerSecond);
-  public static double kMaxAcceleration = Meters.of(1).per(Second).per(Second).in(MetersPerSecondPerSecond);
-
-  public static boolean kElevatorAutomatic = true;
-
-
-  }
-
  
 
 public static  class limelightConstants{
@@ -172,12 +110,12 @@ public static double goalHeightInches = Units.metersToInches(0.305);
 public static boolean isRightReef;
 public static  double xReefSetpoint = isRightReef? 3: -3;
 
-public static final double yReefSetpoint =  3;
-public static final double yReefTolerance = 0.15;
+public static final double yReefSetpoint =  8;
+public static final double yReefTolerance = 0.05;
 
-public static final double xLeftReefSetpoint = 4;
+public static final double xLeftReefSetpoint = 2;
 public static final double xRightReefSetpoint = -7;
-public static final double xReefTolerance = 0.15;
+public static final double xReefTolerance = 0.05;
 
 public static final double rotReefSetpoint = 0.0;
 public static final double rotReefTolerance = 1;

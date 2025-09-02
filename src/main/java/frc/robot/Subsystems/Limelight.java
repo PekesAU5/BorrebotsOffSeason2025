@@ -133,7 +133,7 @@ return positions[4];
                 double xVelocity = -xPidController.calculate(getTx())*0.7 ;
                 double yVelocity = -yPidController.calculate(getTy()) * 0.5;
                 // double zVelocity = -zPidController.calculate(getTx(), xSetPoint)*0.75 - (controller.getRightX()*0.25);
-                double zVelocity = -zPidController.calculate(getRy())*0.7;
+                double zVelocity = zPidController.calculate(getRy())*0.7;
                     
 // if(!isAlligned()){
     // driveSubsystem.drive(0, 0, 0, false, true);
@@ -156,7 +156,7 @@ return positions[4];
         }, driveSubsystem);
     }
 
-    public Command allignAllWithJoyStickAndId(XboxController controller) {
+    /*public Command allignAllWithJoyStickAndId(XboxController controller) {
         return Commands.run(() -> {
             if (hasTarget()) {
                 double xVelocity = -xPidController.calculate(getTx(), 3) * 0.5;
@@ -171,7 +171,7 @@ return positions[4];
            
             }
         }, driveSubsystem);
-    }
+    }*/
 
     public Command allignAllReef(boolean isRightReef) {
     
