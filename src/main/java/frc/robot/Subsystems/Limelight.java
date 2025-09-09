@@ -73,20 +73,19 @@ public class Limelight {
    
 
     public double getTx(){
-        return NetworkTableInstance.getDefault().getTable("limelight-ll").getEntry("tx").getDouble(0);
-       
-      
+        double[] positions = LimelightHelpers.getBotPose_TargetSpace(LL);
+        return positions[0];
     }
 
     
     public double getTy(){
-    
-        return NetworkTableInstance.getDefault().getTable(LL).getEntry("ty").getDouble(0);
+        double[] positions = LimelightHelpers.getBotPose_TargetSpace(LL);
+        return positions[2];
     }
 
     public double getRy(){
         double[] positions = LimelightHelpers.getBotPose_TargetSpace(LL);
-return positions[4];
+        return positions[4];
     }
     public double getTa(){
         return LimelightHelpers.getTA(LL);
@@ -127,63 +126,24 @@ return positions[4];
     public Command allignAllAxis() {
 
         return Commands.run(() -> {
-            // limelightConstants.isRightReef = isRightReef;
-            //   xPidController.setSetpoint(limelightConstants.xReefSetpoint);
             if (hasTarget()) {
                 double xVelocity = -xPidController.calculate(getTx())*0.7 ;
                 double yVelocity = -yPidController.calculate(getTy()) * 0.5;
-                // double zVelocity = -zPidController.calculate(getTx(), xSetPoint)*0.75 - (controller.getRightX()*0.25);
-                double zVelocity = zPidController.calculate(getRy())*0.7;
-                    
-// if(!isAlligned()){
-    // driveSubsystem.drive(0, 0, 0, false, true);
-// }
+                double zVelocity = -zPidController.calculate(getRy())*0.7;
     driveSubsystem.drive(yVelocity, xVelocity, zVelocity, false, true);}
-             
-
-            
+       
     }, driveSubsystem);
         
     }
 
-    public Command allignAllWithJoyStick(double xSetPoint, double ySetPoint, XboxController controller) {
-        return Commands.run(() -> {
-            double xVelocity = -xPidController.calculate(getTx(), xSetPoint) * 0.5;
-            double yVelocity = -yPidController.calculate(getTy(), ySetPoint) * 0.5;
-            double zVelocity = (-zPidController.calculate(getTx(), xSetPoint)) - controller.getRightX() * 0.25;
-
-            driveSubsystem.drive(yVelocity, xVelocity, zVelocity, false, true);
-        }, driveSubsystem);
-    }
-
-    /*public Command allignAllWithJoyStickAndId(XboxController controller) {
-        return Commands.run(() -> {
-            if (hasTarget()) {
-                double xVelocity = -xPidController.calculate(getTx(), 3) * 0.5;
-                double yVelocity = -yPidController.calculate(getTy(), 3) * 0.5;
-                double zVelocity = -zPidController.calculate(getRy())*0.75 - (controller.getRightX()*0.25);
-                // double zVelocity = zPidController.calculate(driveSubsystem.getLimitedGyroYaw(), ReefAngles.get(18))
-                    // + (controller.getRightX() * 0.25);
-
-                driveSubsystem.drive(yVelocity, xVelocity, zVelocity, false, true);
-
-             
-           
-            }
-        }, driveSubsystem);
-    }*/
-
     public Command allignAllReef(boolean isRightReef) {
-    
-    
 
-    if(isRightReef){
-       xPidController.setSetpoint(limelightConstants.xRightReefSetpoint);
-    }else{
-        xPidController.setSetpoint(limelightConstants.xLeftReefSetpoint);
-    }
-     
-        return allignAllAxis().until(()->isAlligned()).finallyDo(()->stopCommand());
+        if(isRightReef){
+        xPidController.setSetpoint(limelightConstants.xRightReefSetpoint);
+        }else{
+            xPidController.setSetpoint(limelightConstants.xLeftReefSetpoint);
+        }
+            return allignAllAxis().until(()->isAlligned()).finallyDo(()->stopCommand());
        
     }
 
@@ -195,20 +155,7 @@ return positions[4];
         return Commands.run(() ->{
             
             LimelightHelpers.setPipelineIndex(LL, 0);
-/*if(DriverStation.getAlliance().get() ==  DriverStation.Alliance.Red){
-    Id = reefside;
-}else{
-    switch (reefside) {
-        case 10: Id = 21; break;
-    case 9: Id = 22; break;
-    case 8: Id = 17; break;
-    case 7: Id = 18; break;
-    case 6: Id = 19; break;
-    case 11: Id = 20; break;
-    
-    }
-}*/
-LimelightHelpers.setPriorityTagID(LL, IdPriority);
+            LimelightHelpers.setPriorityTagID(LL, IdPriority);
             
             allignAllReef(isRightReef);
 

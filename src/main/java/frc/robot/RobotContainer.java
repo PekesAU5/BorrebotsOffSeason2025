@@ -196,6 +196,8 @@ shuffleboardData();
         tab.addDouble("Ty",()-> limelight.getTy());
         tab.addDouble("Tz",()-> limelight.getRy());
         tab.addBoolean("IsAlligned", ()-> limelight.isAlligned());
+
+
         
 
 
