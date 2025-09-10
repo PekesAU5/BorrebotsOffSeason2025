@@ -118,7 +118,7 @@ public static final double xRightReefSetpoint = -.2;
 public static final double xReefTolerance = 0.05;
 
 public static final double rotReefSetpoint = 0.0;
-public static final double rotReefTolerance = 1;
+public static final double rotReefTolerance = 0.02;
 
 
 

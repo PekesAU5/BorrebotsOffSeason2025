@@ -114,9 +114,10 @@ public class Limelight {
   
 
     public boolean isAlligned(){
-        if(zPidController.getError() < limelightConstants.rotReefTolerance && 
-         yPidController.getError() < limelightConstants.yReefTolerance &&
-         xPidController.getError() < limelightConstants.xReefTolerance){
+        if(
+            // zPidController.getError() < limelightConstants. && 
+        //  yPidController.getError() < limelightConstants.xReefSetpoint&&
+         xPidController.getError() < limelightConstants.rotReefSetpoint){
             return true;
          }else{
                 return false;
@@ -127,10 +128,10 @@ public class Limelight {
 
         return Commands.run(() -> {
             if (hasTarget()) {
-                double xVelocity = -xPidController.calculate(getTx())*0.7 ;
-                double yVelocity = -yPidController.calculate(getTy()) * 0.5;
-                double zVelocity = -zPidController.calculate(getRy())*0.7;
-    driveSubsystem.drive(yVelocity, xVelocity, zVelocity, false, true);}
+                // double xVelocity = -xPidController.calculate(getTx());
+                // double yVelocity = -yPidController.calculate(getTy());
+                double zVelocity = -zPidController.calculate(getRy());
+    driveSubsystem.drive(0, 0, zVelocity, false, true);}
        
     }, driveSubsystem);
         
