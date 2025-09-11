@@ -9,12 +9,10 @@ import java.util.Map;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.LimelightHelpers;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.limelightConstants;
+import frc.robot.LimelightHelpers;
 
 
 
@@ -51,22 +49,22 @@ public class Limelight {
 
        
 
-        // angle values acording id
-        // Left Hexagon (Blue)
-        ReefAngles.put(21, 0.0);   // Given
-        ReefAngles.put(22, 60.0);  // Given
-        ReefAngles.put(17, 120.0); // Adjusted
-        ReefAngles.put(18, 180.0); // Adjusted
-        ReefAngles.put(19, 240.0); // Adjusted
-        ReefAngles.put(20, 300.0); // Adjusted
+        // // angle values acording id
+        // // Left Hexagon (Blue)
+        // ReefAngles.put(21, 0.0);   // Given
+        // ReefAngles.put(22, 60.0);  // Given
+        // ReefAngles.put(17, 120.0); // Adjusted
+        // ReefAngles.put(18, 180.0); // Adjusted
+        // ReefAngles.put(19, 240.0); // Adjusted
+        // ReefAngles.put(20, 300.0); // Adjusted
 
-        // Right Hexagon (Red)
-        ReefAngles.put(10, 0.0);   // Given
-        ReefAngles.put(9, 60.0);   // Given
-        ReefAngles.put(8, 120.0);  // Adjusted
-        ReefAngles.put(7, 180.0); // Adjusted
-        ReefAngles.put(6, 240.0);  // Adjusted
-        ReefAngles.put(11, 300.0);  // Adjusted
+        // // Right Hexagon (Red)
+        // ReefAngles.put(10, 0.0);   // Given
+        // ReefAngles.put(9, 60.0);   // Given
+        // ReefAngles.put(8, 120.0);  // Adjusted
+        // ReefAngles.put(7, 180.0); // Adjusted
+        // ReefAngles.put(6, 240.0);  // Adjusted
+        // ReefAngles.put(11, 300.0);  // Adjusted
         
 
     }
