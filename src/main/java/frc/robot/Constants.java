@@ -110,12 +110,12 @@ public static double goalHeightInches = Units.metersToInches(0.305);
 public static boolean isRightReef;
 public static  double xReefSetpoint = isRightReef? 3: -3;
 
-public static final double yReefSetpoint =  -1.1;
-public static final double yReefTolerance = 0.05;
+public static final double yReefSetpoint =  -8.6;
+public static final double yReefTolerance = 0.02;
 
-public static final double xLeftReefSetpoint = -.2;
-public static final double xRightReefSetpoint = -.2;
-public static final double xReefTolerance = 0.05;
+public static final double xLeftReefSetpoint = -1.5;
+public static final double xRightReefSetpoint = 3.7;
+public static final double xReefTolerance = 0.02;
 
 public static final double rotReefSetpoint = 0.0;
 public static final double rotReefTolerance = 0.02;

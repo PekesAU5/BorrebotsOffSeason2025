@@ -128,9 +128,9 @@ shuffleboardData();
 
    
    
-    new Trigger(() -> m_driverController.getRightTriggerAxis() > 0.05).whileTrue(limelight.allignAllReef(true));
+    new Trigger(() -> m_driverController.getRightTriggerAxis() > 0.05).whileTrue(limelight.allignAllAxisRight());
     
-  new Trigger(()-> m_driverController.getLeftTriggerAxis() >0.05).whileTrue(limelight.allignAllReef(false));
+  new Trigger(()-> m_driverController.getLeftTriggerAxis() >0.05).whileTrue(limelight.allignAllAxisLeft());
 
 
     // new Trigger(() -> m_driverController.getRightTriggerAxis() > 0).whileTrue(limelight.allignAllWithJoyStickAndGyro(6.0, 3.0, m_driverController));

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.LimelightHelpers;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.limelightConstants;
 
 
@@ -34,14 +35,14 @@ public class Limelight {
     public Limelight(DriveSubsystem driveSubsystem){
         this.driveSubsystem = driveSubsystem;
         zPidController = new PIDController(0.0125, 0.0, 0.0);
-        yPidController = new PIDController(0.02, 0.0, 0.0);
-        xPidController = new PIDController(0.0125, 0.0, 0.0);
+        yPidController = new PIDController(0.035, 0.0, 0.0);
+        xPidController = new PIDController(0.035, 0.0, 0.0);
 
-       
-        // xPidController.setTolerance(limelightConstants.xReefTolerance);
+        // xPidController.setSetpoint(limelightConstants.xRightReefSetpoint);
+        xPidController.setTolerance(limelightConstants.xReefTolerance);
 
         yPidController.setSetpoint(limelightConstants.yReefSetpoint);
-        // yPidController.setTolerance(limelightConstants.yReefTolerance);
+        yPidController.setTolerance(limelightConstants.yReefTolerance);
 
         zPidController.setSetpoint(limelightConstants.rotReefSetpoint);
         // zPidController.setTolerance(limelightConstants.rotReefTolerance);
@@ -74,13 +75,13 @@ public class Limelight {
 
     public double getTx(){
         double[] positions = LimelightHelpers.getBotPose_TargetSpace(LL);
-        return positions[0];
+        return positions[0]*10;
     }
 
     
     public double getTy(){
         double[] positions = LimelightHelpers.getBotPose_TargetSpace(LL);
-        return positions[2];
+        return positions[2]*10;
     }
 
     public double getRy(){
@@ -115,54 +116,60 @@ public class Limelight {
 
     public boolean isAlligned(){
         if(
-            // zPidController.getError() < limelightConstants. && 
-        //  yPidController.getError() < limelightConstants.xReefSetpoint&&
-         xPidController.getError() < limelightConstants.rotReefSetpoint){
+            zPidController.getError() < limelightConstants.yReefSetpoint && 
+            yPidController.getError() < limelightConstants.xReefSetpoint &&
+            xPidController.getError() < limelightConstants.rotReefSetpoint){
             return true;
          }else{
                 return false;
          }
     }
-
-    public Command allignAllAxis() {
+    public Command allignAllAxisRight() {
 
         return Commands.run(() -> {
             if (hasTarget()) {
-                // double xVelocity = -xPidController.calculate(getTx());
-                // double yVelocity = -yPidController.calculate(getTy());
+                xPidController.setSetpoint(limelightConstants.xRightReefSetpoint);
+                // DriveConstants.kSlowMode = false;
+                 double xVelocity = -xPidController.calculate(getTx());
+                 double yVelocity = yPidController.calculate(getTy());
                 double zVelocity = -zPidController.calculate(getRy());
-    driveSubsystem.drive(0, 0, zVelocity, false, true);}
+
+    driveSubsystem.drive(yVelocity,xVelocity , zVelocity, false, true);}
+       
+    }, driveSubsystem);}
+
+    public Command allignAllAxisLeft() {
+
+        return Commands.run(() -> {
+            if (hasTarget()) {
+                xPidController.setSetpoint(limelightConstants.xLeftReefSetpoint);
+                // DriveConstants.kSlowMode = false;
+                 double xVelocity = -xPidController.calculate(getTx());
+                 double yVelocity = yPidController.calculate(getTy());
+                double zVelocity = -zPidController.calculate(getRy());
+
+    driveSubsystem.drive(yVelocity,xVelocity , zVelocity, false, true);}
        
     }, driveSubsystem);
         
     }
 
-    public Command allignAllReef(boolean isRightReef) {
-
-        if(isRightReef){
-        xPidController.setSetpoint(limelightConstants.xRightReefSetpoint);
-        }else{
-            xPidController.setSetpoint(limelightConstants.xLeftReefSetpoint);
-        }
-            return allignAllAxis().until(()->isAlligned()).finallyDo(()->stopCommand());
-       
-    }
 
 
     
 
-    public Command AutoReefAllignAllAxis(int IdPriority, boolean isRightReef){
+//     public Command AutoReefAllignAllAxis(int IdPriority, boolean isRightReef){
       
-        return Commands.run(() ->{
+//         return Commands.run(() ->{
             
-            LimelightHelpers.setPipelineIndex(LL, 0);
-            LimelightHelpers.setPriorityTagID(LL, IdPriority);
+//             LimelightHelpers.setPipelineIndex(LL, 0);
+//             LimelightHelpers.setPriorityTagID(LL, IdPriority);
             
-            allignAllReef(isRightReef);
+//             allignAllReef(isRightReef);
 
-        }, driveSubsystem);
+//         }, driveSubsystem);
 
-}
+// }
 
 
 
