@@ -54,15 +54,15 @@ public final class Constants{
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
     // SPARK MAX CAN IDs
-    public static final int kFrontLeftDrivingCanId = 11;
-    public static final int kFrontRightDrivingCanId = 12;
-    public static final int kRearRightDrivingCanId = 13;
-    public static final int kRearLeftDrivingCanId = 14;
+    public static final int kFrontLeftDrivingCanId = 21;
+    public static final int kFrontRightDrivingCanId = 22;
+    public static final int kRearRightDrivingCanId = 23;
+    public static final int kRearLeftDrivingCanId = 24;
 
-    public static final int kFrontLeftTurningCanId = 21;
-    public static final int kFrontRightTurningCanId = 22;
-    public static final int kRearRightTurningCanId = 23;
-    public static final int kRearLeftTurningCanId = 24;
+    public static final int kFrontLeftTurningCanId = 11;
+    public static final int kFrontRightTurningCanId = 12;
+    public static final int kRearRightTurningCanId = 13;
+    public static final int kRearLeftTurningCanId = 14;
 
     public static final boolean kGyroReversed = true;
     public static boolean fieldRelative = true;
@@ -113,7 +113,7 @@ public static  double xReefSetpoint = isRightReef? 3: -3;
 public static final double yReefSetpoint =  -8.6;
 public static final double yReefTolerance = 0.02;
 
-public static final double xLeftReefSetpoint = -1.5;
+public static final double xLeftReefSetpoint = -1.2;
 public static final double xRightReefSetpoint = 3.7;
 public static final double xReefTolerance = 0.02;
 

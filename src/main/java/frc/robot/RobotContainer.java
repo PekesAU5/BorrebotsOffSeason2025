@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 // import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Subsystems.Climber;
 // import frc.robot.Subsystems.ArmSubsystem;
 // import frc.robot.Subsystems.ClimbSubsytem;
 import frc.robot.Subsystems.DriveSubsystem;
@@ -27,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -47,6 +49,8 @@ private final SendableChooser<Command> autoChooser;
  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
 private final Limelight limelight = new Limelight(m_robotDrive);
+
+private final Climber m_climber = new Climber();
 
 
 // The driver's controller
@@ -101,7 +105,8 @@ shuffleboardData();
         //    m_intake.setDefaultCommand(new RunCommand(()-> m_intake.stop(), m_intake));
         //  m_climb.setDefaultCommand(new RunCommand(() -> m_climb.StopClimb(), m_climb));
           
-       
+       m_climber.setDefaultCommand(m_climber.stopClimb());
+
  }
 
  /**
@@ -119,6 +124,10 @@ shuffleboardData();
 
     new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
     .onTrue(new InstantCommand(() ->m_robotDrive.changeSpeed(), m_robotDrive));
+
+
+    new POVButton(m_driverController, 0).whileTrue(m_climber.frontClimb());
+    new POVButton(m_driverController, 180).whileTrue(m_climber.unflexClimb());
 
   
 
