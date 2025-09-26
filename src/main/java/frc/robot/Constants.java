@@ -124,6 +124,14 @@ public static final double rotReefTolerance = 0.02;
 
 }
 
+public static class climbConstants{
+
+public static double climbPower = 1.0;
+public static double unflexPower = -1.0;
+public static double stopClimb = 0.0;
+
+}
+
 public static class NeoMotorConstants {
 public static final double kFreeSpeedRpm = 5676;
 }

@@ -21,15 +21,12 @@ public class Climber extends SubsystemBase {
 
 
   }
-public Command frontClimb(){ 
-  return Commands.run(() -> {climberMotor.set(0.7);} ,this);}
 
-public Command stopClimb(){
-  return Commands.run(() -> {climberMotor.set(0.0);}, this);}
-
-  public Command unflexClimb(){
-    return Commands.run(() -> {climberMotor.set(-0.7);}, this);}
-  
+public Command setPower(double power){
+  return Commands.run(()->{
+    climberMotor.set(power);
+  }, this);
+}
 
   @Override
   public void periodic() {

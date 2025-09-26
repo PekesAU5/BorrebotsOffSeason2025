@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 // import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.climbConstants;
 import frc.robot.Subsystems.Climber;
 // import frc.robot.Subsystems.ArmSubsystem;
 // import frc.robot.Subsystems.ClimbSubsytem;
@@ -27,6 +28,7 @@ import frc.robot.Subsystems.Limelight;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -54,8 +56,8 @@ private final Climber m_climber = new Climber();
 
 
 // The driver's controller
- XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
- XboxController m_driverController1 = new XboxController(OIConstants.kDriverController1Port);
+ CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+ CommandXboxController m_driverController1 = new CommandXboxController(OIConstants.kDriverController1Port);
 
  /**
   * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -78,8 +80,6 @@ private final Climber m_climber = new Climber();
 
 shuffleboardData();
 
-
-   SmartDashboard.putNumber("Tx Value", limelight.getTx());
     
     // Configure the button bindings
    configureButtonBindings();
@@ -96,16 +96,8 @@ shuffleboardData();
                DriveConstants.fieldRelative, true),
            m_robotDrive));
 
-        //    m_climb.setDefaultCommand(new RunCommand(() -> m_climb.Climb(m_driverController1.getRightY()), m_climb));
-        
-        //    m_elevator.setDefaultCommand(new RunCommand(()-> m_elevator.stop(), m_elevator));
-  
-        //    m_arm.setDefaultCommand(new RunCommand(()-> m_arm.stop(), m_arm));
-  
-        //    m_intake.setDefaultCommand(new RunCommand(()-> m_intake.stop(), m_intake));
-        //  m_climb.setDefaultCommand(new RunCommand(() -> m_climb.StopClimb(), m_climb));
           
-       m_climber.setDefaultCommand(m_climber.stopClimb());
+       m_climber.setDefaultCommand(m_climber.setPower(climbConstants.stopClimb));
 
  }
 
@@ -122,18 +114,15 @@ shuffleboardData();
 
 
 
-    new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
-    .onTrue(new InstantCommand(() ->m_robotDrive.changeSpeed(), m_robotDrive));
-
-
-    new POVButton(m_driverController, 0).whileTrue(m_climber.frontClimb());
-    new POVButton(m_driverController, 180).whileTrue(m_climber.unflexClimb());
+m_driverController.leftBumper().onTrue(m_robotDrive.changeSpeed());
+    // new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value).onTrue(m_robotDrive.changeSpeed());
+m_driverController.povUp().whileTrue(m_climber.setPower(climbConstants.climbPower));
+m_driverController.povDown().whileTrue(m_climber.setPower(climbConstants.unflexPower));
 
   
 
     
-
-  
+// m_driverController.rightTrigger(OIConstants.kTriggerTreshold)
 
    
    
@@ -142,20 +131,11 @@ shuffleboardData();
   new Trigger(()-> m_driverController.getLeftTriggerAxis() >0.05).whileTrue(limelight.allignAllAxisLeft());
 
 
-    // new Trigger(() -> m_driverController.getRightTriggerAxis() > 0).whileTrue(limelight.allignAllWithJoyStickAndGyro(6.0, 3.0, m_driverController));
-    
-    // new Trigger(() -> m_driverController.getLeftTriggerAxis() > 0).whileTrue(limelight.allignAllWithJoyStickAndGyro(-3.0, 3.0, m_driverController));
+    m_driverController.povLeft().onTrue(m_robotDrive.changeDrivingMode());
 
-    
-    new JoystickButton(m_driverController, XboxController.Button.kY.value)
-    .onTrue(new InstantCommand(()-> m_robotDrive.changeDrivingMode(), m_robotDrive));
-
+    m_driverController.povRight().onTrue(m_robotDrive.calibrate());
 
   
-    new JoystickButton(m_driverController, XboxController.Button.kB.value)
-    .onTrue(new InstantCommand(()-> m_robotDrive.calibrate(), m_robotDrive));
-
-    // new Trigger(()-> m_driverController1.getRightTriggerAxis() > 0.2).whileTrue(new RunCommand(()->m_intake.AlgaeIntake()));
 
  
 
@@ -171,40 +151,25 @@ shuffleboardData();
   * @return the command to run in autonomous
   */
  public Command getAutonomousCommand() {
-
-
-
-
-
  return autoChooser.getSelected();
 }
-
-/*public Command getAutoWithLimeLight() {
-    return Commands.sequence(autoChooser.getSelected(),
-                                limelight.allignXAxis(10));
-}*/
-
-
-
-
-
 
 
     public void shuffleboardData() {
         
-        ShuffleboardTab  tab = Shuffleboard.getTab("RobotData");
         
-        // tab.add(autoChooser).withWidget(BuiltInWidgets.kSplitButtonChooser);
+        
         SmartDashboard.putData(autoChooser);
-        tab.addInteger("Id", () -> limelight.getId()).withWidget(BuiltInWidgets.kTextView);
-        tab.addBoolean("Id Detected", ()-> limelight.hasTarget()).withWidget(BuiltInWidgets.kBooleanBox);
-        tab.addDouble("Navx limited heading", () -> m_robotDrive.getLimitedGyroYaw());
-        tab.addBoolean("Slow Mode", ()-> DriveConstants.kSlowMode).withWidget(BuiltInWidgets.kBooleanBox);
-        tab.addBoolean("FieldRelative", ()-> DriveConstants.fieldRelative).withWidget(BuiltInWidgets.kBooleanBox);
-        tab.addDouble("Tx",()-> limelight.getTx());
-        tab.addDouble("Ty",()-> limelight.getTy());
-        tab.addDouble("Tz",()-> limelight.getRy());
-        tab.addBoolean("IsAlligned", ()-> limelight.isAlligned());
+        SmartDashboard.putNumber("Id", limelight.getId());
+        SmartDashboard.putBoolean("Id Detected", limelight.hasTarget());
+        SmartDashboard.putNumber("NavX Angle", m_robotDrive.getLimitedGyroYaw());
+        SmartDashboard.putBoolean("Slow Mode", DriveConstants.kSlowMode);
+        SmartDashboard.putBoolean("FieldRelative", DriveConstants.fieldRelative);
+        SmartDashboard.putNumber("Tx", limelight.getTx());
+        SmartDashboard.putNumber("Ty", limelight.getTy());
+        SmartDashboard.putNumber("Tz", limelight.getRy());
+        SmartDashboard.putBoolean("IsAlligned", limelight.isAlligned());
+       
 
 
         

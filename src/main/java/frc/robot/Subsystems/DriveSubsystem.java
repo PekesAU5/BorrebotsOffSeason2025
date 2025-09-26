@@ -21,10 +21,13 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.studica.frc.AHRS;
 
@@ -53,7 +56,7 @@ private final MAXSwerveModule m_rearRight = new MAXSwerveModule(
 
   // private ProfiledPIDController prueba = new ProfiledPIDController(1, 0, 0, new Constraints(1, 2));
 
-
+Field2d field2d;
 // The gyro sensor
 // private final ADXRS450_Gyro m_gyro = new ADXRS450_Gyro();
 private final AHRS m_gyro = new AHRS(AHRS.NavXComType.kMXP_SPI);
@@ -85,6 +88,8 @@ private double ySpeedGlobal;
 private double rotSpeedGlobal;
 /** Creates a new DriveSubsystem. */
 public DriveSubsystem() {
+
+  field2d = new Field2d();  
   // Usage reporting for MAXSwerve template
   HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
  
@@ -125,7 +130,7 @@ public DriveSubsystem() {
     }
       
     // Configure AutoBuilder last
-    
+    SmartDashboard.putData("Chassis/Odometry", field2d);
 }
 
 @Override
@@ -140,6 +145,8 @@ public void periodic() {
           m_rearRight.getPosition()
       });
 
+
+field2d.setRobotPose(getPose());
       // SmartDashboard.putBoolean("SlowMode", DriveConstants.kSlowMode);
       // SmartDashboard.putBoolean("FieldRelative", DriveConstants.fieldRelative);
       // SmartDashboard.putNumber("GyroAngle", getHeading());
@@ -310,8 +317,10 @@ public void zeroHeading() {
 }
 
 //Calibrate gyro
-public void calibrate(){
-  m_gyro.reset();
+public Command calibrate(){
+  return Commands.runOnce(()-> {
+    m_gyro.reset();
+  }, this);
 }
 /**
  * Returns the heading of the robot.
@@ -349,19 +358,24 @@ public void driveRobotRelative(ChassisSpeeds speeds) {
   setModuleStates(DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds));
 }
 
-public void changeDrivingMode(){
-DriveConstants.fieldRelative = !DriveConstants.fieldRelative;
+public Command changeDrivingMode(){
+return Commands.runOnce(()->{
+  DriveConstants.fieldRelative = !DriveConstants.fieldRelative;
+}, this);
 }
 
-public void changeSpeed(){
-  if (DriveConstants.kMaxSpeedMetersPerSecond == 4.8) {
+public Command changeSpeed(){
+
+  return Commands.runOnce(()->
+  { if (DriveConstants.kMaxSpeedMetersPerSecond == 4.8) {
     DriveConstants.kMaxSpeedMetersPerSecond = 2.3;
 
     DriveConstants.kSlowMode = true;
   } else{
     DriveConstants.kMaxSpeedMetersPerSecond = 4.8;
     DriveConstants.kSlowMode = false;
-  }
+  }}, this);
+ 
 }
 
 
