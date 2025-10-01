@@ -8,21 +8,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-
-
-/**
- * The Constants class provides a convenient place for teams to hold robot-wide
- * numerical or boolean
- * constants. This class should not be used for any other purpose. All constants
- * should be declared
- * globally (i.e. public static). Do not put anything functional in this class.
- *
- * <p>
- * It is advised to statically import this class (or one of its inner classes)
- * wherever the
- * constants are needed, to reduce verbosity.
- */
-
 public final class Constants{
 
 
@@ -54,15 +39,15 @@ public final class Constants{
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
     // SPARK MAX CAN IDs
-    public static final int kFrontLeftDrivingCanId = 21;
-    public static final int kFrontRightDrivingCanId = 22;
-    public static final int kRearRightDrivingCanId = 23;
-    public static final int kRearLeftDrivingCanId = 24;
+    public static final int kFrontLeftDrivingCanId = 11;
+    public static final int kFrontRightDrivingCanId = 12;
+    public static final int kRearRightDrivingCanId = 13;
+    public static final int kRearLeftDrivingCanId = 14;
 
-    public static final int kFrontLeftTurningCanId = 11;
-    public static final int kFrontRightTurningCanId = 12;
-    public static final int kRearRightTurningCanId = 13;
-    public static final int kRearLeftTurningCanId = 14;
+    public static final int kFrontLeftTurningCanId = 21;
+    public static final int kFrontRightTurningCanId = 22;
+    public static final int kRearRightTurningCanId = 23;
+    public static final int kRearLeftTurningCanId = 24;
 
     public static final boolean kGyroReversed = true;
     public static boolean fieldRelative = true;
@@ -113,22 +98,12 @@ public static  double xReefSetpoint = isRightReef? 3: -3;
 public static final double yReefSetpoint =  -8.6;
 public static final double yReefTolerance = 0.02;
 
-public static final double xLeftReefSetpoint = -1.2;
-public static final double xRightReefSetpoint = 3.7;
+public static final double xLeftReefSetpoint = -1.5;
+public static final double xRightReefSetpoint = 3.3;
 public static final double xReefTolerance = 0.02;
 
 public static final double rotReefSetpoint = 0.0;
 public static final double rotReefTolerance = 0.02;
-
-
-
-}
-
-public static class climbConstants{
-
-public static double climbPower = 1.0;
-public static double unflexPower = -1.0;
-public static double stopClimb = 0.0;
 
 }
 
@@ -160,6 +135,42 @@ public static final class OIConstants {
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+  }
+
+  public static final class Elevator{
+
+    public static final int ElevatorID = 5;
+
+    public static final double Gearing = 24.0;
+    public static final double ElevatorSproketTeeth = 16;
+    public static final double DrumRadius = (ElevatorSproketTeeth * Units.inchesToMeters(0.625)) / (2 * Math.PI);
+    
+
+    public static final double LowPOS = 0.00;
+    // public static final double L1 = Units.inchesToMeters(); //la posición oficial es
+    public static final double L2 = Units.inchesToMeters(42.5); //la posición oficial es 31.875in
+    public static final double L3 = Units.inchesToMeters(58.6614); //la posición oficial es 47.625in
+
+    public static final double MINheight = 0.0;
+    public static final double MAXheight = Units.inchesToMeters(27.5591);
+
+    public static final double kP = 1.0; //
+    public static final double kI = 0.0; // PROBAR VALORES
+    public static final double kD = 0.2; //
+
+    public static final double MAX_VEL_M_S = 0.8; // m/s Si el elevador tiembla o se pasa, baja
+    public static final double MAX_ACCEL_M_S2 = 1.0; // m/s^2 Si se siente muy lento y sobrado, sube
+
+    public static final double SoftLimitTolerance = 0.02; //Meters
+
+    public static final double MAX_OUTPUT = 1.0; //No hace mas de 100% el motor
+    public static final double MIN_OUTPUT = -0.5; // limitar descenso
+
+    public static final String DashboardTab = "Elevator";
+
+    public static final double kElevatorDeadband = 0.1;
+
+
   }
   
 }

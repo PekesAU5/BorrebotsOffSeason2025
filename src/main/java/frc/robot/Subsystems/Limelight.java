@@ -47,26 +47,6 @@ public class Limelight {
       
         zPidController.enableContinuousInput(-180.0, 180);
 
-       
-
-        // // angle values acording id
-        // // Left Hexagon (Blue)
-        // ReefAngles.put(21, 0.0);   // Given
-        // ReefAngles.put(22, 60.0);  // Given
-        // ReefAngles.put(17, 120.0); // Adjusted
-        // ReefAngles.put(18, 180.0); // Adjusted
-        // ReefAngles.put(19, 240.0); // Adjusted
-        // ReefAngles.put(20, 300.0); // Adjusted
-
-        // // Right Hexagon (Red)
-        // ReefAngles.put(10, 0.0);   // Given
-        // ReefAngles.put(9, 60.0);   // Given
-        // ReefAngles.put(8, 120.0);  // Adjusted
-        // ReefAngles.put(7, 180.0); // Adjusted
-        // ReefAngles.put(6, 240.0);  // Adjusted
-        // ReefAngles.put(11, 300.0);  // Adjusted
-        
-
     }
 
    
