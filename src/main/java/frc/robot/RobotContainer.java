@@ -17,6 +17,9 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 // import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.climbConstants;
+import frc.robot.Constants.limelightConstants;
+import frc.robot.Subsystems.Climber;
 // import frc.robot.Subsystems.ArmSubsystem;
 // import frc.robot.Subsystems.ClimbSubsytem;
 import frc.robot.Subsystems.DriveSubsystem;
@@ -27,6 +30,7 @@ import frc.robot.Subsystems.Limelight;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -37,9 +41,10 @@ public class RobotContainer {
     private final DriveSubsystem m_robotDrive = new DriveSubsystem();
     private final Limelight limelight = new Limelight(m_robotDrive);
     private final Elevator elevator = new Elevator();
+    private final Climber m_climber = new Climber();
 
-    XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-    XboxController m_driverController1 = new XboxController(OIConstants.kDriverController1Port);
+    CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+    CommandXboxController m_driverController1 = new CommandXboxController(OIConstants.kDriverController1Port);
 
     public RobotContainer() {
 
@@ -72,6 +77,7 @@ public class RobotContainer {
             )
         );
 
+        m_climber.setDefaultCommand(m_climber.setPower(climbConstants.stopClimb));
         //    m_climb.setDefaultCommand(new RunCommand(() -> m_climb.Climb(m_driverController1.getRightY()), m_climb));
         
         //    m_elevator.setDefaultCommand(new RunCommand(()-> m_elevator.stop(), m_elevator));
@@ -83,28 +89,30 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
+    m_driverController.leftTrigger(OIConstants.kDriveDeadband);
 
-    new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value)
-    .onTrue(new InstantCommand(() ->m_robotDrive.changeSpeed(), m_robotDrive));
-
-    new Trigger(() -> m_driverController.getRightTriggerAxis() > 0.05).whileTrue(limelight.allignAllAxisRight());
+    // m_driverController.leftBumper().whileTrue(limelight.allignRobot(limelightConstants.LEFTALLIGN));
     
-    new Trigger(()-> m_driverController.getLeftTriggerAxis() >0.05).whileTrue(limelight.allignAllAxisLeft());
+    // m_driverController.rightBumper().whileTrue(limelight.allignRobot(limelightConstants.RIGHTALLIGN));
+    
+    // m_driverController.rightTrigger(OIConstants.kTriggerTreshold).whileTrue(limelight.allignRobot(limelightConstants.ALGAEALLIGN));
 
-    new JoystickButton(m_driverController, XboxController.Button.kY.value)
-    .onTrue(new InstantCommand(()-> m_robotDrive.changeDrivingMode(), m_robotDrive));
+   
+   m_driverController.y().onTrue(m_robotDrive.changeDrivingMode());
 
-    new JoystickButton(m_driverController, XboxController.Button.kB.value)
-    .onTrue(new InstantCommand(()-> m_robotDrive.calibrate(), m_robotDrive)); 
+    m_driverController.b().onTrue(m_robotDrive.calibrate());
 
-    new JoystickButton(m_driverController1, XboxController.Button.kA.value)
-    .onTrue(elevator.moveToRestCommand());
+    m_driverController1.a().onTrue(elevator.moveToRestCommand());
+    
+    m_driverController1.b().onTrue(elevator.moveToL2Command());
 
-    new JoystickButton(m_driverController1, XboxController.Button.kX.value)
-    .onTrue(elevator.moveToL2Command());
+    m_driverController1.x().onTrue(elevator.moveToL3Command());
 
-    new JoystickButton(m_driverController1, XboxController.Button.kY.value)
-    .onTrue(elevator.moveToL3Command());
+    m_driverController1.y().onTrue(elevator.moveToL4Command());
+
+
+    m_driverController1.povUp().whileTrue(m_climber.setPower(climbConstants.unflexPower));
+
 
     }
 

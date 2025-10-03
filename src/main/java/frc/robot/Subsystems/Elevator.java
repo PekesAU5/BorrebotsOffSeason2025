@@ -43,6 +43,7 @@ public class Elevator extends SubsystemBase {
         .idleMode(IdleMode.kBrake)
         .smartCurrentLimit(40)
         .inverted(true);
+    config.encoder.positionConversionFactor(positionFactor);
     motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     encoder = motor.getEncoder();
@@ -67,11 +68,11 @@ public class Elevator extends SubsystemBase {
 
 
   public double getPositionMeters() {
-    return encoder.getPosition() * positionFactor;
+    return encoder.getPosition();
   }
 
   public double getVelocityMetersPerSecond() {
-    return encoder.getVelocity() * positionFactor;
+    return encoder.getVelocity();
   }
 
   public void setManual(double output) {
@@ -82,7 +83,7 @@ public class Elevator extends SubsystemBase {
     if (getPositionMeters() <= Constants.Elevator.MINheight && output < 0) output = 0;
     if (getPositionMeters() >= Constants.Elevator.MAXheight && output > 0) output = 0;
 
-    motor.set(output);
+    motor.set(output*0.5);
   }
 
   public void moveToPosition(double targetMeters) {
@@ -133,5 +134,10 @@ public class Elevator extends SubsystemBase {
     public Command moveToL3Command() {
         return Commands.runOnce(() -> moveToPosition(Constants.Elevator.L3), this)
                        .andThen(Commands.waitUntil(() -> pid.atGoal()));
+    }
+
+    public Command moveToL4Command(){
+      return Commands.runOnce(() -> moveToPosition(Constants.Elevator.L4), this)
+                     .andThen(Commands.waitUntil(() -> pid.atGoal()));
     }
 }

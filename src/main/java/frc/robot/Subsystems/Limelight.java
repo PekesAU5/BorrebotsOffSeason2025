@@ -94,9 +94,7 @@ public class Limelight {
 
     public boolean isAlligned(){
         if(
-            zPidController.getError() < limelightConstants.yReefSetpoint && 
-            yPidController.getError() < limelightConstants.xReefSetpoint &&
-            xPidController.getError() < limelightConstants.rotReefSetpoint){
+           zPidController.atSetpoint() && yPidController.atSetpoint() && xPidController.atSetpoint()){
             return true;
          }else{
                 return false;
