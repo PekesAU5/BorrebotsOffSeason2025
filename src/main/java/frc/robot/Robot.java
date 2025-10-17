@@ -7,6 +7,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.OIConstants;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -17,7 +19,7 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
- 
+  private CommandXboxController m_driverController1 = new CommandXboxController(OIConstants.kDriverController1Port);
  
   /**
    
@@ -62,7 +64,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    
+
    
   }
 

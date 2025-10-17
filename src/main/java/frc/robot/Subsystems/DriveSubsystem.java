@@ -26,6 +26,11 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
+<<<<<<< Updated upstream
+import frc.robot.Constants.armConstants;
+=======
+import frc.robot.Constants.OIConstants;
+>>>>>>> Stashed changes
 import frc.robot.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -70,8 +75,6 @@ private final AHRS m_gyro = new AHRS(AHRS.NavXComType.kMXP_SPI);
   private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
-
-    
 
 // Odometry class for tracking robot pose
 SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
@@ -152,6 +155,7 @@ field2d.setRobotPose(getPose());
       // SmartDashboard.putBoolean("FieldRelative", DriveConstants.fieldRelative);
       // SmartDashboard.putNumber("GyroAngle", getHeading());
 }
+
 
 /**
  * Returns the currently-estimated pose of the robot.
@@ -255,6 +259,7 @@ double xSpeedCommanded;
   double ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
   double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
 
+  
   xSpeedGlobal = xSpeedDelivered;
   ySpeedGlobal = ySpeedDelivered;
   rotSpeedGlobal = rotDelivered;
@@ -370,10 +375,12 @@ public Command changeSpeed(){
   return Commands.runOnce(()->
   { if (DriveConstants.kMaxSpeedMetersPerSecond == 4.8) {
     DriveConstants.kMaxSpeedMetersPerSecond = 2.3;
+    DriveConstants.kMaxAngularSpeed = Math.PI;
 
     DriveConstants.kSlowMode = true;
   } else{
     DriveConstants.kMaxSpeedMetersPerSecond = 4.8;
+    DriveConstants.kMaxAngularSpeed = 2 * Math.PI;
     DriveConstants.kSlowMode = false;
   }}, this);
  
@@ -381,7 +388,7 @@ public Command changeSpeed(){
 
 
 public void setDeltaAngle(float newDelta){
-  Constants.DriveConstants.deltaangle = newDelta;
+ DriveConstants.deltaangle = newDelta;
 
 }
 
@@ -406,6 +413,10 @@ public Command Delta0() {
       };
   newCommand.addRequirements(this);
   return newCommand;
+}
+
+public void changeAlgaeMode(){
+  OIConstants.kAlgaeMode = !OIConstants.kAlgaeMode;
 }
 
 }

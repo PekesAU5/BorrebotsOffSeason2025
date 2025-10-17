@@ -9,6 +9,8 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.DriveConstants;
+
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 
@@ -41,7 +45,7 @@ public class Elevator extends SubsystemBase {
     SparkMaxConfig config = new SparkMaxConfig();
     config
         .idleMode(IdleMode.kBrake)
-        .smartCurrentLimit(40)
+        .smartCurrentLimit(50)
         .inverted(true);
     config.encoder.positionConversionFactor(positionFactor);
     motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -79,10 +83,8 @@ public class Elevator extends SubsystemBase {
     state = State.MANUAL;
     output = Math.max(Constants.Elevator.MIN_OUTPUT, Math.min(Constants.Elevator.MAX_OUTPUT, output));
 
-    // Soft limits
-    if (getPositionMeters() <= Constants.Elevator.MINheight && output < 0) output = 0;
-    if (getPositionMeters() >= Constants.Elevator.MAXheight && output > 0) output = 0;
-
+    if(MathUtil.isNear(Constants.Elevator.MAXheight, getPositionMeters(), Constants.Elevator.SoftLimitTolerance) && output > 0) output = 0;
+    if(MathUtil.isNear(Constants.Elevator.MINheight, getPositionMeters(), Constants.Elevator.SoftLimitTolerance) && output < 0) output = 0;
     motor.set(output*0.5);
   }
 
@@ -93,8 +95,24 @@ public class Elevator extends SubsystemBase {
     state = State.MOVING;
   }
 
+  public void ElevatorBasedDriveTrainVelocity(){
+    if(getPositionMeters() > 1.6){DriveConstants.kMaxSpeedMetersPerSecond = 1.5;
+    DriveConstants.kMaxAngularSpeed = Math.PI / 2;}
+    else if(getPositionMeters() > 1.4){DriveConstants.kMaxSpeedMetersPerSecond = 3.0;
+    DriveConstants.kMaxAngularSpeed = Math.PI/ 2;}
+    else{
+      DriveConstants.kMaxAngularSpeed = Math.PI/ 2;
+    if(DriveConstants.kSlowMode){DriveConstants.kMaxSpeedMetersPerSecond = 2.4;}
+    else{DriveConstants.kMaxSpeedMetersPerSecond = 4.8;}
+  }
+
+  
+  }
   @Override
   public void periodic() {
+    ElevatorBasedDriveTrainVelocity();
+
+  
   // Actualizar PID desde dashboard
   pid.setP(SmartDashboard.getNumber("Elevator/kP", Constants.Elevator.kP));
   pid.setI(SmartDashboard.getNumber("Elevator/kI", Constants.Elevator.kI));
@@ -125,6 +143,13 @@ public class Elevator extends SubsystemBase {
         return Commands.runOnce(() -> moveToPosition(Constants.Elevator.LowPOS), this)
                        .andThen(Commands.waitUntil(() -> pid.atGoal()));
     }
+  
+    
+    public Command moveToL1Command() {
+      return Commands.runOnce(() -> moveToPosition(Constants.Elevator.L1), this)
+                     .andThen(Commands.waitUntil(() -> pid.atGoal()));
+  }
+
 
     public Command moveToL2Command() {
         return Commands.runOnce(() -> moveToPosition(Constants.Elevator.L2), this)
@@ -138,6 +163,30 @@ public class Elevator extends SubsystemBase {
 
     public Command moveToL4Command(){
       return Commands.runOnce(() -> moveToPosition(Constants.Elevator.L4), this)
+                     .andThen(Commands.waitUntil(() -> pid.atGoal()));
+    }
+
+    public Command moveToLowAlgaeCommand(){
+      return Commands.runOnce(() -> moveToPosition(Constants.Elevator.LOWALGAE), this)
+                     .andThen(Commands.waitUntil(() -> pid.atGoal()));
+    }
+    public Command moveToHighAlgaeCommand(){
+      return Commands.runOnce(() -> moveToPosition(Constants.Elevator.HIGHALGAE), this)
+                     .andThen(Commands.waitUntil(() -> pid.atGoal()));
+    }
+
+    public Command movetoNetCommand(){
+      return Commands.runOnce(() -> moveToPosition(Constants.Elevator.NET), this)
+                     .andThen(Commands.waitUntil(() -> pid.atGoal()));
+    }
+
+    public Command moveToProcessorCommand(){
+      return Commands.runOnce(() -> moveToPosition(Constants.Elevator.PROCESSOR), this)
+                     .andThen(Commands.waitUntil(() -> pid.atGoal()));
+    }
+
+    public Command moveToCoralStation(){
+      return Commands.runOnce(() -> moveToPosition(Constants.Elevator.CORALSTATION), this)
                      .andThen(Commands.waitUntil(() -> pid.atGoal()));
     }
 }
